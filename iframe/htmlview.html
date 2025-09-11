@@ -73,7 +73,11 @@
             let tag = document.createElement('script');
             tag.src = 'https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js';
             tag.onload = () => {
-                const parsedUrl = new URL(window.location.href), tag = parsedUrl.searchParams.get("tag");
+                const parsedUrl = new URL(window.location.href), tag = parsedUrl.searchParams.get("tag"), fontMathJax = parsedUrl.searchParams.get("fontMathJax");
+                let MathJaxStyles = document.getElementsByClassName('MathJax');
+                for (let ii = 0; ii < MathJaxStyles.length; ii++) {
+                    MathJaxStyles[ii].style.fontSize = fontMathJax + 'px !important';
+                }
                 sendMessageToParent({ eventType: "onload", data: { scrollHeight: document.documentElement.scrollHeight, tag: "'" + tag + "'" } });
                 window.addEventListener("message", function (events) {
                     let infos = events.data;
