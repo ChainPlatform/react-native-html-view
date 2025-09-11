@@ -41,7 +41,7 @@ export function formHTML(content = "", mathjax = 1, fontsize = 13, fontMathJax =
                         outline: none;
                     }
                     .MathJax {
-                        font-size: ${fontMathJax}px;
+                        font-size: ${fontMathJax}px !important;
                     }
                 </style>
                 <script>
