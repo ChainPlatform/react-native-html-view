@@ -1,6 +1,6 @@
 {
     "name": "@chainplatform/html",
-    "version": "0.1.10",
+    "version": "0.1.11",
     "description": "The library allows you to display html contents with react-native-webview without ejecting support both react-native and react-native-web.",
     "main": "index.js",
     "devDependencies": {

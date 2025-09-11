@@ -44,6 +44,9 @@ export function formHTML(content = "", mathjax = 1, fontsize = 13, fontMathJax =
                         font-size: ${fontMathJax}px !important;
                     }
                 </style>
+            </head>
+            <body>
+                <div class="htmlview-container">${content}</div>
                 <script>
                     function sendMessageToParent(event) {
                         (window.ReactNativeWebView || window.parent || window).postMessage(JSON.stringify(event), '*');
@@ -67,9 +70,6 @@ export function formHTML(content = "", mathjax = 1, fontsize = 13, fontMathJax =
                         firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
                     }
                 </script>
-            </head>
-            <body>
-                <div class="htmlview-container">${content}</div>
             </body>
         </html>`;
 }
