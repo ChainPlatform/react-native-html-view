@@ -41,7 +41,7 @@
         }
     </style>
     <script>
-        const parsedUrl = new URL(window.location.href), mathjax = parsedUrl.searchParams.get("mathjax"), content = parsedUrl.searchParams.get("content"), fontsize = parsedUrl.searchParams.get("fontsize");
+        const parsedUrl = new URL(window.location.href), mathjax = parsedUrl.searchParams.get("mathjax"), content = parsedUrl.searchParams.get("content"), fontsize = parsedUrl.searchParams.get("fontsize"), tag = parsedUrl.searchParams.get("tag");
         document.body.style.fontSize = fontsize + 'px';
         let htmlview = document.getElementsByClassName('htmlview-container');
         for (let i = 0; i < htmlview.length; i++) {
@@ -50,18 +50,19 @@
         function sendMessageToParent(event) {
             (window.ReactNativeWebView || window.parent || window).postMessage(JSON.stringify(event), '*');
         }
-        sendMessageToParent({ eventType: "onload", data: { scrollHeight: document.documentElement.scrollHeight } });
+        sendMessageToParent({ eventType: "onload", data: { scrollHeight: document.documentElement.scrollHeight, tag: "'" + tag + "'" } });
         let mathVal = mathjax == 1 ? true : false;
         if (mathVal == true) {
             let tag = document.createElement('script');
             tag.src = 'https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js';
             tag.onload = () => {
+                const parsedUrl = new URL(window.location.href), tag = parsedUrl.searchParams.get("tag");
+                sendMessageToParent({ eventType: "onload", data: { scrollHeight: document.documentElement.scrollHeight, tag: "'" + tag + "'" } });
                 window.addEventListener("message", function (events) {
                     let infos = events.data;
                     if (typeof events.data != "object") {
                         infos = JSON.parse(events.data);
                     }
-                    console.log("infos ", JSON.stringify(infos));
                 })
             };
             tag.onerror = () => { };

@@ -19,10 +19,11 @@ export default class HTMLView extends Component {
         const content = typeof this.props.content != "undefined" ? this.props.content : "";
         const fontsize = typeof this.props.fontsize != "undefined" ? this.props.fontsize : 14;
         const mathjax = typeof this.props.mathjax != "undefined" ? this.props.mathjax : 0;
+        const tag = typeof this.props.tag != "undefined" ? this.props.tag : "";
         if (typeof this.props.useRemote != "undefined" && this.props.useRemote == true) {
-            loadContent = { uri: DEFAULT_URL + '?content=' + content + '&mathjax=' + mathjax + '&fontsize=' + fontsize };
+            loadContent = { uri: DEFAULT_URL + '?content=' + content + '&mathjax=' + mathjax + '&fontsize=' + fontsize + '&tag=' + tag };
         } else {
-            loadContent = { html: formHTML(content, mathjax, fontsize) };
+            loadContent = { html: formHTML(content, mathjax, fontsize, tag) };
         }
         return loadContent;
     }
@@ -30,6 +31,8 @@ export default class HTMLView extends Component {
     injectedJavaScript = `
         setTimeout(function() { 
             let event = { eventType: "onload", data: { scrollHeight: document.documentElement.scrollHeight } };
+            console.log("document.documentElement.scrollHeight ", document.documentElement.scrollHeight);
+            document.body.style.height = document.documentElement.scrollHeight + 'px';
             (window.ReactNativeWebView || window.parent || window).postMessage(JSON.stringify(event), '*');
         }, 500);
         true;
@@ -40,8 +43,9 @@ export default class HTMLView extends Component {
         if (typeof event.nativeEvent.data != "object") {
             infos = JSON.parse(event.nativeEvent.data);
         }
+        const tag = typeof this.props.tag != "undefined" ? this.props.tag : "";
         if (typeof infos.eventType != "undefined" && infos.eventType == "onload") {
-            if (typeof infos.data.scrollHeight != "undefined") {
+            if (typeof infos.data.scrollHeight != "undefined" && tag == infos.data.tag) {
                 this.setState({ webHeight: infos.data.scrollHeight });
             }
         }
@@ -57,7 +61,7 @@ export default class HTMLView extends Component {
                     overScrollMode={"never"}
                     nestedScrollEnabled={true}
                     automaticallyAdjustContentInsets={true}
-                    injectedJavaScript={this.injectedJavaScript}
+                    // injectedJavaScript={this.injectedJavaScript}
                     domStorageEnabled={true}
                     javaScriptEnabled={true}
                     originWhitelist={['*']}
