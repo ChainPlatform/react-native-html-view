@@ -17,10 +17,12 @@ export default class HTMLView extends Component {
     getContent() {
         let loadContent = null;
         const content = typeof this.props.content != "undefined" ? this.props.content : "";
+        const fontsize = typeof this.props.fontsize != "undefined" ? this.props.fontsize : 14;
+        const mathjax = typeof this.props.mathjax != "undefined" ? this.props.mathjax : 0;
         if (typeof this.props.useRemote != "undefined" && this.props.useRemote == true) {
-            loadContent = { uri: DEFAULT_URL + '?content=' + content + '&mathjax=' + '' };
+            loadContent = { uri: DEFAULT_URL + '?content=' + content + '&mathjax=' + mathjax + '&fontsize=' + fontsize };
         } else {
-            loadContent = { html: formHTML(content) };
+            loadContent = { html: formHTML(content, mathjax, fontsize) };
         }
         return loadContent;
     }
