@@ -56,7 +56,6 @@
             let tag = document.createElement('script');
             tag.src = 'https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js';
             tag.onload = () => {
-                sendMessageToParent({ eventType: "onload", data: { scrollHeight: document.documentElement.scrollHeight } });
                 window.addEventListener("message", function (events) {
                     let infos = events.data;
                     if (typeof events.data != "object") {

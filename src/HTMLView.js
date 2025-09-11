@@ -27,6 +27,14 @@ export default class HTMLView extends Component {
         return loadContent;
     }
 
+    injectedJavaScript = `
+        setTimeout(function() { 
+            let event = { eventType: "onload", data: { scrollHeight: document.documentElement.scrollHeight } };
+            (window.ReactNativeWebView || window.parent || window).postMessage(JSON.stringify(event), '*');
+        }, 500);
+        true;
+    `;
+
     onMessage = (event) => {
         let infos = event.nativeEvent.data;
         if (typeof event.nativeEvent.data != "object") {
@@ -49,6 +57,7 @@ export default class HTMLView extends Component {
                     overScrollMode={"never"}
                     nestedScrollEnabled={true}
                     automaticallyAdjustContentInsets={true}
+                    injectedJavaScript={this.injectedJavaScript}
                     domStorageEnabled={true}
                     javaScriptEnabled={true}
                     originWhitelist={['*']}
