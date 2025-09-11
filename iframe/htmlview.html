@@ -13,6 +13,8 @@
             height: 100%;
         }
         body {
+            font-family: system-ui, sans-serif;
+            font-size: 14px;
             background-color: transparent;
             margin: 0;
             padding: 0;
@@ -39,7 +41,8 @@
         }
     </style>
     <script>
-        const parsedUrl = new URL(window.location.href), mathjax = parsedUrl.searchParams.get("mathjax"), content = parsedUrl.searchParams.get("content");
+        const parsedUrl = new URL(window.location.href), mathjax = parsedUrl.searchParams.get("mathjax"), content = parsedUrl.searchParams.get("content"), fontsize = parsedUrl.searchParams.get("fontsize");
+        document.body.style.fontSize = fontsize + 'px';
         let htmlview = document.getElementsByClassName('htmlview-container');
         for (let i = 0; i < htmlview.length; i++) {
             htmlview[i].innerHTML = content;
