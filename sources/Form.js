@@ -1,4 +1,4 @@
-export function formHTML(content = "", mathjax = 1, fontsize = 13, fontMathJax = 15, tag = "") {
+export function formHTML(content = "", mathjax = 1, fontsize = 13, fontMathJax = 15, htmltag = "") {
     return `<!DOCTYPE html>
         <html>
             <head>
@@ -51,13 +51,13 @@ export function formHTML(content = "", mathjax = 1, fontsize = 13, fontMathJax =
                     function sendMessageToParent(event) {
                         (window.ReactNativeWebView || window.parent || window).postMessage(JSON.stringify(event), '*');
                     }
-                    sendMessageToParent({ eventType: "onload", data: { scrollHeight: document.documentElement.scrollHeight, tag: '${tag}' } });
+                    sendMessageToParent({ eventType: "onload", data: { scrollHeight: document.documentElement.scrollHeight, htmltag: '${htmltag}' } });
                     let mathVal = ${mathjax} == 1 ? true : false;
                     if (mathVal == true) {
                         let tag = document.createElement('script');
                         tag.src = 'https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js';
                         tag.onload = () => {
-                            sendMessageToParent({ eventType: "onload", data: { scrollHeight: document.documentElement.scrollHeight, tag: '${tag}' } });
+                            sendMessageToParent({ eventType: "onload", data: { scrollHeight: document.documentElement.scrollHeight, htmltag: '${htmltag}' } });
                             window.addEventListener("message", function (events) {
                                 let infos = events.data;
                                 if (typeof events.data != "object") {

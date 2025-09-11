@@ -54,8 +54,9 @@
 <body>
     <div class="htmlview-container"></div>
     <script>
-        const parsedUrl = new URL(window.location.href), mathjax = parsedUrl.searchParams.get("mathjax"), content = parsedUrl.searchParams.get("content"), fontMathJax = parsedUrl.searchParams.get("fontMathJax"), fontsize = parsedUrl.searchParams.get("fontsize"), tag = parsedUrl.searchParams.get("tag");
+        const parsedUrl = new URL(window.location.href), mathjax = parsedUrl.searchParams.get("mathjax"), content = parsedUrl.searchParams.get("content"), fontMathJax = parsedUrl.searchParams.get("fontMathJax"), fontsize = parsedUrl.searchParams.get("fontsize"), htmltag = parsedUrl.searchParams.get("htmltag");
         document.querySelector('body').style.fontSize = fontsize + 'px !important';
+        document.body.style.height = document.documentElement.scrollHeight + 'px';
         let MathJaxStyles = document.getElementsByClassName('MathJax');
         for (let ii = 0; ii < MathJaxStyles.length; ii++) {
             MathJaxStyles[ii].style.fontSize = fontMathJax + 'px !important';
@@ -67,18 +68,18 @@
         function sendMessageToParent(event) {
             (window.ReactNativeWebView || window.parent || window).postMessage(JSON.stringify(event), '*');
         }
-        sendMessageToParent({ eventType: "onload", data: { scrollHeight: document.documentElement.scrollHeight, tag: "'" + tag + "'" } });
+        sendMessageToParent({ eventType: "onload", data: { scrollHeight: document.documentElement.scrollHeight, htmltag: "'" + htmltag + "'" } });
         let mathVal = mathjax == 1 ? true : false;
         if (mathVal == true) {
             let tag = document.createElement('script');
             tag.src = 'https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js';
             tag.onload = () => {
-                const parsedUrl = new URL(window.location.href), tag = parsedUrl.searchParams.get("tag"), fontMathJax = parsedUrl.searchParams.get("fontMathJax");
+                const parsedUrl = new URL(window.location.href), htmltag = parsedUrl.searchParams.get("htmltag"), fontMathJax = parsedUrl.searchParams.get("fontMathJax");
                 let MathJaxStyles = document.getElementsByClassName('MathJax');
                 for (let ii = 0; ii < MathJaxStyles.length; ii++) {
                     MathJaxStyles[ii].style.fontSize = fontMathJax + 'px !important';
                 }
-                sendMessageToParent({ eventType: "onload", data: { scrollHeight: document.documentElement.scrollHeight, tag: "'" + tag + "'" } });
+                sendMessageToParent({ eventType: "onload", data: { scrollHeight: document.documentElement.scrollHeight, htmltag: "'" + htmltag + "'" } });
                 window.addEventListener("message", function (events) {
                     let infos = events.data;
                     if (typeof events.data != "object") {
