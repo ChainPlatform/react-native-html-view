@@ -1,4 +1,4 @@
-export function formHTML(content = "", mathjax = 1, fontsize = 13, tag = "") {
+export function formHTML(content = "", mathjax = 1, fontsize = 13, fontMathJax = 15, tag = "") {
     return `<!DOCTYPE html>
         <html>
             <head>
@@ -39,6 +39,9 @@ export function formHTML(content = "", mathjax = 1, fontsize = 13, tag = "") {
                     }
                     *:focus {
                         outline: none;
+                    }
+                    .MathJax {
+                        font-size: ${fontMathJax}px;
                     }
                 </style>
                 <script>

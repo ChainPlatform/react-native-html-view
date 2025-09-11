@@ -19,11 +19,12 @@ export default class HTMLView extends Component {
         const content = typeof this.props.content != "undefined" ? this.props.content : "";
         const fontsize = typeof this.props.fontsize != "undefined" ? this.props.fontsize : 14;
         const mathjax = typeof this.props.mathjax != "undefined" ? this.props.mathjax : 0;
+        const fontMathJax = typeof this.props.fontMathJax != "undefined" ? this.props.fontMathJax : 15;
         const tag = typeof this.props.tag != "undefined" ? this.props.tag : "";
         if (typeof this.props.useRemote != "undefined" && this.props.useRemote == true) {
-            loadContent = { uri: DEFAULT_URL + '?content=' + content + '&mathjax=' + mathjax + '&fontsize=' + fontsize + '&tag=' + tag };
+            loadContent = { uri: DEFAULT_URL + '?content=' + content + '&mathjax=' + mathjax + '&fontsize=' + fontsize + '&tag=' + tag + '&fontMathJax=' + fontMathJax };
         } else {
-            loadContent = { html: formHTML(content, mathjax, fontsize, tag) };
+            loadContent = { html: formHTML(content, mathjax, fontsize, fontMathJax, tag) };
         }
         return loadContent;
     }

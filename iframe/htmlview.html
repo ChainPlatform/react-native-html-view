@@ -39,10 +39,17 @@
         *:focus {
             outline: none;
         }
+        .MathJax {
+            font-size: 14px;
+        }
     </style>
     <script>
-        const parsedUrl = new URL(window.location.href), mathjax = parsedUrl.searchParams.get("mathjax"), content = parsedUrl.searchParams.get("content"), fontsize = parsedUrl.searchParams.get("fontsize"), tag = parsedUrl.searchParams.get("tag");
+        const parsedUrl = new URL(window.location.href), mathjax = parsedUrl.searchParams.get("mathjax"), content = parsedUrl.searchParams.get("content"), fontMathJax = parsedUrl.searchParams.get("fontMathJax"), fontsize = parsedUrl.searchParams.get("fontsize"), tag = parsedUrl.searchParams.get("tag");
         document.body.style.fontSize = fontsize + 'px';
+        let MathJaxStyles = document.getElementsByClassName('MathJax');
+        for (let ii = 0; ii < MathJaxStyles.length; ii++) {
+            MathJaxStyles[ii].style.fontSize = fontMathJax + 'px';
+        }
         let htmlview = document.getElementsByClassName('htmlview-container');
         for (let i = 0; i < htmlview.length; i++) {
             htmlview[i].innerHTML = content;
