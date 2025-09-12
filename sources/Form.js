@@ -48,30 +48,35 @@ export function formHTML(content = "", mathjax = 1, fontsize = 13, fontMathJax =
             <body>
                 <div class="htmlview-container">${content}</div>
                 <script>
+                    MathJax = {
+                        loader: {
+                            load: [
+                                "input/asciimath",
+                                "output/chtml"
+                            ]
+                        }
+                    }
+                </script>
+                <script>
                     function sendMessageToParent(event) {
                         (window.ReactNativeWebView || window.parent || window).postMessage(JSON.stringify(event), '*');
                     }
-                    sendMessageToParent({ eventType: "onload", data: { scrollHeight: document.documentElement.scrollHeight, htmltag: '${htmltag}' } });
                 </script>
-                <script defer src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
                 <script>
-                    // let mathVal = ${mathjax} == 1 ? true : false;
-                    // if (mathVal == true) {
-                    //     let tag = document.createElement('script');
-                    //     tag.src = 'https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js';
-                    //     tag.onload = () => {
-                    //         sendMessageToParent({ eventType: "onload", data: { scrollHeight: document.documentElement.scrollHeight, htmltag: '${htmltag}' } });
-                    //         window.addEventListener("message", function (events) {
-                    //             let infos = events.data;
-                    //             if (typeof events.data != "object") {
-                    //                 infos = JSON.parse(events.data);
-                    //             }
-                    //         })
-                    //     };
-                    //     tag.onerror = () => { };
-                    //     let firstScriptTag = document.getElementsByTagName('script')[0];
-                    //     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-                    // }
+                    let mathVal = ${mathjax} == 1 ? true : false;
+                    if (mathVal == true) {
+                        let tag = document.createElement('script');
+                        tag.src = 'https://cdn.jsdelivr.net/npm/mathjax@4/startup.js';
+                        tag.defer = true;
+                        tag.onload = () => {
+                            window.onload = (event) => {
+                                sendMessageToParent({ eventType: "onload", data: { scrollHeight: document.documentElement.scrollHeight, htmltag: '${htmltag}' } });
+                            };
+                        };
+                        tag.onerror = () => { };
+                        let firstScriptTag = document.getElementsByTagName('script')[1];
+                        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+                    }
                 </script>
             </body>
         </html>`;

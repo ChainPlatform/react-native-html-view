@@ -2,7 +2,7 @@ import { Component, createRef } from 'react';
 import { Platform, View } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { formHTML } from '../sources/Form';
-import { DEFAULT_USER_AGENT, DEFAULT_URL } from '../helpers';
+import { DEFAULT_USER_AGENT, DEFAULT_URL, utf8ToBase64 } from '../helpers';
 
 export default class HTMLView extends Component {
     constructor(props) {
@@ -22,7 +22,8 @@ export default class HTMLView extends Component {
         const fontMathJax = typeof this.props.fontMathJax != "undefined" ? this.props.fontMathJax : 15;
         const htmltag = typeof this.props.htmltag != "undefined" ? this.props.htmltag : "";
         if (typeof this.props.useRemote != "undefined" && this.props.useRemote == true) {
-            loadContent = { uri: DEFAULT_URL + '?content=' + content + '&mathjax=' + mathjax + '&fontsize=' + fontsize + '&htmltag=' + htmltag + '&fontMathJax=' + fontMathJax };
+            let base_content = utf8ToBase64(content);
+            loadContent = { uri: DEFAULT_URL + '?content=' + base_content + '&mathjax=' + mathjax + '&fontsize=' + fontsize + '&htmltag=' + htmltag + '&fontMathJax=' + fontMathJax };
         } else {
             loadContent = { html: formHTML(content, mathjax, fontsize, fontMathJax, htmltag) };
         }
@@ -32,7 +33,6 @@ export default class HTMLView extends Component {
     injectedJavaScript = `
         setTimeout(function() { 
             let event = { eventType: "onload", data: { scrollHeight: document.documentElement.scrollHeight, htmltag: '${typeof this.props.htmltag != "undefined" ? this.props.htmltag : ""}' } };
-            console.log("document.documentElement.scrollHeight ", document.documentElement.scrollHeight);
             document.body.style.height = document.documentElement.scrollHeight + 'px';
             (window.ReactNativeWebView || window.parent || window).postMessage(JSON.stringify(event), '*');
         }, 500);
@@ -44,8 +44,8 @@ export default class HTMLView extends Component {
         if (typeof event.nativeEvent.data != "object") {
             infos = JSON.parse(event.nativeEvent.data);
         }
-        const htmltag = typeof this.props.htmltag != "undefined" ? this.props.htmltag : "";
         if (typeof infos.eventType != "undefined" && infos.eventType == "onload") {
+            const htmltag = typeof this.props.htmltag != "undefined" ? this.props.htmltag : "";
             if (typeof infos.data.scrollHeight != "undefined" && htmltag == infos.data.htmltag) {
                 this.setState({ webHeight: infos.data.scrollHeight });
             }
