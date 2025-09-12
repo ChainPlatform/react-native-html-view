@@ -43,6 +43,10 @@ export function formHTML(content = "", mathjax = 1, fontsize = 13, fontMathJax =
                     .MathJax {
                         font-size: ${fontMathJax}px !important;
                     }
+
+                    mjx-math {
+                        padding: 0px 0;
+                    }
                 </style>
             </head>
             <body>
