@@ -74,7 +74,7 @@
         function base64ToUtf8(base64) {
             return decodeURIComponent(base64);
         }
-        const parsedUrl = new URL(window.location.href), mathjax = parsedUrl.searchParams.get("mathjax"), content = parsedUrl.searchParams.get("content"), fontMathJax = parsedUrl.searchParams.get("fontMathJax"), fontsize = parsedUrl.searchParams.get("fontsize"), htmltag = parsedUrl.searchParams.get("htmltag");
+        const parsedUrl = new URL(window.location.href), mathjax = parsedUrl.searchParams.get("mathjax"), content = parsedUrl.searchParams.get("content"), fontMathJax = parsedUrl.searchParams.get("fontMathJax"), fontsize = parsedUrl.searchParams.get("fontsize"), htmltag = parsedUrl.searchParams.get("htmltag"), color = parsedUrl.searchParams.get("color");
         let htmlview = document.getElementsByClassName('htmlview-container');
         const decodedContent = base64ToUtf8(content);
         for (let i = 0; i < htmlview.length; i++) {
@@ -93,12 +93,13 @@
             tag.defer = true;
             tag.onload = () => {
                 window.onload = (event) => {
-                    const parsedUrl = new URL(window.location.href), htmltag = parsedUrl.searchParams.get("htmltag"), fontMathJax = parsedUrl.searchParams.get("fontMathJax"), fontsize = parsedUrl.searchParams.get("fontsize");
+                    const parsedUrl = new URL(window.location.href), htmltag = parsedUrl.searchParams.get("htmltag"), fontMathJax = parsedUrl.searchParams.get("fontMathJax"), fontsize = parsedUrl.searchParams.get("fontsize"), color = parsedUrl.searchParams.get("color");
                     const elementsWithClass = document.querySelectorAll('.MathJax');
                     elementsWithClass.forEach(element => {
                         element.setAttribute('style', 'font-size: ' + fontMathJax + 'px !important;');
                     });
                     document.body.style.fontSize = fontsize + 'px';
+                    document.body.style.color = color;
                     sendMessageToParent({ eventType: "onload", data: { scrollHeight: document.documentElement.scrollHeight, htmltag: "" + htmltag + "" } });
                 };
             };

@@ -1,4 +1,4 @@
-export function formHTML(content = "", mathjax = 1, fontsize = 13, fontMathJax = 15, htmltag = "") {
+export function formHTML(content = "", mathjax = 1, fontsize = 13, fontMathJax = 15, color = "", htmltag = "") {
     return `<!DOCTYPE html>
         <html>
             <head>
@@ -16,6 +16,7 @@ export function formHTML(content = "", mathjax = 1, fontsize = 13, fontMathJax =
                     body {
                         font-family: system-ui, sans-serif;
                         font-size: ${fontsize}px;
+                        color: ${color};
                         background-color: transparent;
                         margin: 0;
                         padding: 0;

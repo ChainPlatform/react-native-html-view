@@ -9,7 +9,8 @@ export default class HTMLView extends Component {
         super(props);
 
         this.state = {
-            webHeight: 0
+            webHeight: 0,
+            marginTop: 0
         }
         this.webRef = createRef(null);
     }
@@ -17,15 +18,16 @@ export default class HTMLView extends Component {
     getContent() {
         let loadContent = null;
         const content = typeof this.props.content != "undefined" ? this.props.content : "";
+        const color = typeof this.props.color != "undefined" ? this.props.color : "#333";
         const fontsize = typeof this.props.fontsize != "undefined" ? this.props.fontsize : 14;
         const mathjax = typeof this.props.mathjax != "undefined" ? this.props.mathjax : 0;
         const fontMathJax = typeof this.props.fontMathJax != "undefined" ? this.props.fontMathJax : 15;
         const htmltag = typeof this.props.htmltag != "undefined" ? this.props.htmltag : "";
         if (typeof this.props.useRemote != "undefined" && this.props.useRemote == true) {
             let base_content = utf8ToBase64(content);
-            loadContent = { uri: DEFAULT_URL + '?content=' + base_content + '&mathjax=' + mathjax + '&fontsize=' + fontsize + '&htmltag=' + htmltag + '&fontMathJax=' + fontMathJax };
+            loadContent = { uri: DEFAULT_URL + '?content=' + base_content + '&mathjax=' + mathjax + '&fontsize=' + fontsize + '&htmltag=' + htmltag + '&fontMathJax=' + fontMathJax + '&color=' + color };
         } else {
-            loadContent = { html: formHTML(content, mathjax, fontsize, fontMathJax, htmltag) };
+            loadContent = { html: formHTML(content, mathjax, fontsize, fontMathJax, color, htmltag) };
         }
         return loadContent;
     }
@@ -46,8 +48,11 @@ export default class HTMLView extends Component {
         }
         if (typeof infos.eventType != "undefined" && infos.eventType == "onload") {
             const htmltag = typeof this.props.htmltag != "undefined" ? this.props.htmltag : "";
+            const marginTop = typeof this.props.marginTop != "undefined" ? this.props.marginTop : 0;
+            let minSize = typeof this.props.minSize != "undefined" ? this.props.minSize : 21;
             if (typeof infos.data.scrollHeight != "undefined" && htmltag == infos.data.htmltag) {
-                this.setState({ webHeight: infos.data.scrollHeight });
+                minSize = minSize < infos.data.scrollHeight ? infos.data.scrollHeight : minSize;
+                this.setState({ webHeight: minSize, marginTop: marginTop });
             }
         }
     };
@@ -55,7 +60,7 @@ export default class HTMLView extends Component {
     render() {
         const content = this.getContent();
         return (
-            <View style={{ height: this.state.webHeight }}>
+            <View style={{ height: this.state.webHeight, marginTop: this.state.marginTop }}>
                 <WebView
                     ref={this.webRef}
                     scalesPageToFit={true}
